@@ -6,6 +6,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signInWithPopup,
+    signInWithRedirect,
     GoogleAuthProvider,
     OAuthProvider,
     signOut,
@@ -58,7 +59,19 @@ export function AuthProvider({ children }) {
 
     // Login or create an account with Google
     async function loginWithGoogle() {
-        const userCredential = await signInWithPopup(auth, googleProvider);
+        let userCredential;
+        try {
+            userCredential = await signInWithPopup(auth, googleProvider);
+        } catch (error) {
+            const redirectErrors = [
+                'auth/popup-blocked',
+                'auth/popup-cancelled-by-user',
+                'auth/operation-not-supported-in-this-environment'
+            ];
+            if (!redirectErrors.includes(error.code)) throw error;
+            await signInWithRedirect(auth, googleProvider);
+            return null;
+        }
         const user = userCredential.user;
         const userRef = ref(database, `users/${user.uid}`);
         const snapshot = await get(userRef);
