@@ -54,5 +54,7 @@ export default async function handler(_request, response) {
 }
 
 function sendJson(response, body, status = 200) {
-    response.status(status).setHeader('Cache-Control', 'no-store').json(body);
+    response.status(status);
+    response.setHeader('Cache-Control', 'no-store');
+    return response.json(body);
 }
