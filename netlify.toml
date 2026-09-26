@@ -2,3 +2,8 @@
   command = "npm run build"
   publish = "dist"
   functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/gold-rates"
+  to = "/.netlify/functions/gold-rates"
+  status = 200
