@@ -5,6 +5,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { RateProvider } from './context/RateContext';
@@ -90,6 +91,7 @@ export default function App() {
                 </main>
 
                 <Footer />
+                <SpeedInsights />
                 </RateProvider>
             </CartProvider>
         </AuthProvider>
