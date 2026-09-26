@@ -102,13 +102,8 @@ export async function fetchLiveGoldRates() {
         return cachedRates;
     }
 
-    // Respect admin manual override
+    // Keep stored rates available as a fallback if live providers fail.
     const storedRates = await getStoredGoldRates();
-    if (storedRates?.manualOverride) {
-        cachedRates = storedRates;
-        lastFetchTime = Date.now();
-        return storedRates;
-    }
 
     // Try each source in order
     const sources = import.meta.env.PROD
