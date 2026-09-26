@@ -2,24 +2,16 @@
 // Product Service - Firebase CRUD for products
 // ============================================
 import { ref, push, set, get, update, remove, query, orderByChild } from 'firebase/database';
-import { database } from '../firebase';
+import { legacyProductsDatabase } from '../firebase';
 
 const PRODUCTS_REF = 'products';
-const LEGACY_PRODUCTS_URL = 'https://kgsjewel-98b89-default-rtdb.firebaseio.com/products.json';
-
-async function getLegacyProducts() {
-    const response = await fetch(LEGACY_PRODUCTS_URL);
-    if (!response.ok) throw new Error(`Legacy products HTTP ${response.status}`);
-    const data = await response.json();
-    return data ? Object.values(data).map(normalizeProduct) : [];
-}
 
 /**
  * Add a new product to Firebase
  */
 export async function addProduct(productData) {
     try {
-        const productsRef = ref(database, PRODUCTS_REF);
+        const productsRef = ref(legacyProductsDatabase, PRODUCTS_REF);
         const newProductRef = push(productsRef);
         const product = {
             ...productData,
@@ -39,7 +31,7 @@ export async function addProduct(productData) {
  */
 export async function getAllProducts() {
     try {
-        const productsRef = ref(database, PRODUCTS_REF);
+        const productsRef = ref(legacyProductsDatabase, PRODUCTS_REF);
         const snapshot = await get(productsRef);
         if (snapshot.exists()) {
             const data = snapshot.val();
@@ -48,8 +40,7 @@ export async function getAllProducts() {
         return [];
     } catch (error) {
         console.error('Error fetching products:', error);
-        console.warn('Using the legacy product catalog while the new database is unavailable.');
-        return getLegacyProducts();
+        throw error;
     }
 }
 
@@ -58,7 +49,7 @@ export async function getAllProducts() {
  */
 export async function getProductById(productId) {
     try {
-        const productRef = ref(database, `${PRODUCTS_REF}/${productId}`);
+        const productRef = ref(legacyProductsDatabase, `${PRODUCTS_REF}/${productId}`);
         const snapshot = await get(productRef);
         if (snapshot.exists()) {
             return normalizeProduct(snapshot.val());
@@ -66,8 +57,7 @@ export async function getProductById(productId) {
         return null;
     } catch (error) {
         console.error('Error fetching product:', error);
-        const products = await getLegacyProducts();
-        return products.find(product => product.id === productId) || null;
+        throw error;
     }
 }
 
@@ -83,7 +73,7 @@ function normalizeProduct(product) {
  */
 export async function updateProduct(productId, updates) {
     try {
-        const productRef = ref(database, `${PRODUCTS_REF}/${productId}`);
+        const productRef = ref(legacyProductsDatabase, `${PRODUCTS_REF}/${productId}`);
         await update(productRef, updates);
         return { id: productId, ...updates };
     } catch (error) {
@@ -97,7 +87,7 @@ export async function updateProduct(productId, updates) {
  */
 export async function deleteProduct(productId) {
     try {
-        const productRef = ref(database, `${PRODUCTS_REF}/${productId}`);
+        const productRef = ref(legacyProductsDatabase, `${PRODUCTS_REF}/${productId}`);
         await remove(productRef);
         return productId;
     } catch (error) {
