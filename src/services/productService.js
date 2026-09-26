@@ -5,6 +5,14 @@ import { ref, push, set, get, update, remove, query, orderByChild } from 'fireba
 import { database } from '../firebase';
 
 const PRODUCTS_REF = 'products';
+const LEGACY_PRODUCTS_URL = 'https://kgsjewel-98b89-default-rtdb.firebaseio.com/products.json';
+
+async function getLegacyProducts() {
+    const response = await fetch(LEGACY_PRODUCTS_URL);
+    if (!response.ok) throw new Error(`Legacy products HTTP ${response.status}`);
+    const data = await response.json();
+    return data ? Object.values(data).map(normalizeProduct) : [];
+}
 
 /**
  * Add a new product to Firebase
@@ -40,7 +48,8 @@ export async function getAllProducts() {
         return [];
     } catch (error) {
         console.error('Error fetching products:', error);
-        throw error;
+        console.warn('Using the legacy product catalog while the new database is unavailable.');
+        return getLegacyProducts();
     }
 }
 
@@ -57,7 +66,8 @@ export async function getProductById(productId) {
         return null;
     } catch (error) {
         console.error('Error fetching product:', error);
-        throw error;
+        const products = await getLegacyProducts();
+        return products.find(product => product.id === productId) || null;
     }
 }
 

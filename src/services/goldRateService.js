@@ -14,7 +14,7 @@ const GOLDAPI_KEY = 'goldapi-18qrwqsmlxk4cqg-io';
 // /goldprice → proxied to https://data-asg.goldprice.org
 const GOLDAPI_PROXY = '/goldapi/XAU/INR';
 const GOLDPRICE_PROXY = '/goldprice/dbXRates/INR';
-const PRODUCTION_RATES_ENDPOINT = '/.netlify/functions/gold-rates';
+const PRODUCTION_RATES_ENDPOINT = '/api/gold-rates';
 
 // In-memory cache (avoids burning free-tier quota)
 let cachedRates = null;
