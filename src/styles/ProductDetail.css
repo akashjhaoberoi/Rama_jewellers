@@ -1,0 +1,162 @@
+/* ============================================
+   Product Details Page Styles
+   ============================================ */
+
+.product-detail {
+    padding: 40px 0 80px;
+}
+
+.product-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+}
+
+.product-image-section {
+    position: sticky;
+    top: calc(var(--navbar-height) + 20px);
+}
+
+.product-main-image {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--light-gray);
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-main-image .placeholder-icon {
+    font-size: 6rem;
+    color: var(--rose-gold-light);
+}
+
+.product-info-section {
+    animation: fadeIn 0.5s ease;
+}
+
+.product-info-section .breadcrumb {
+    display: flex;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.product-info-section .breadcrumb a {
+    color: var(--rose-gold);
+}
+
+.product-info-section h1 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.product-info-section .gold-type-badge {
+    display: inline-flex;
+    margin-bottom: 20px;
+}
+
+.product-info-section .description {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 32px;
+    font-size: 0.95rem;
+}
+
+/* Price Breakdown */
+.price-breakdown {
+    background: var(--cream);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.price-breakdown h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+}
+
+.price-row.total {
+    border-top: 2px solid var(--rose-gold-light);
+    margin-top: 12px;
+    padding-top: 16px;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--rose-gold-dark);
+    font-family: var(--font-display);
+}
+
+/* Specs Grid */
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.spec-item {
+    padding: 16px;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+}
+
+.spec-item .label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+}
+
+.spec-item .value {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.add-to-cart-section {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+    .product-detail-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .product-image-section {
+        position: static;
+    }
+
+    .specs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .add-to-cart-section {
+        flex-direction: column;
+    }
+}
