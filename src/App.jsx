@@ -7,6 +7,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { RateProvider } from './context/RateContext';
 import { ProtectedRoute, AdminRoute } from './components/ProtectedRoute';
 
 import Navbar from './components/Navbar';
@@ -30,6 +31,7 @@ export default function App() {
     return (
         <AuthProvider>
             <CartProvider>
+                <RateProvider>
                 {/* Toast notifications */}
                 <Toaster
                     position="top-right"
@@ -88,6 +90,7 @@ export default function App() {
                 </main>
 
                 <Footer />
+                </RateProvider>
             </CartProvider>
         </AuthProvider>
     );

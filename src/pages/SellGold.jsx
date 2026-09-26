@@ -3,7 +3,7 @@
 // ============================================
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { fetchLiveGoldRates, getStoredSilverRates } from '../services/goldRateService';
+import { useRates } from '../context/RateContext';
 import { createSellRequest, calculateSellValue, getUserSellRequests } from '../services/sellGoldService';
 import GoldRateWidget from '../components/GoldRateWidget';
 import toast from 'react-hot-toast';
@@ -19,8 +19,7 @@ const STATUS_COLORS = {
 
 export default function SellGold() {
     const { currentUser } = useAuth();
-    const [goldRates, setGoldRates] = useState(null);
-    const [silverRates, setSilverRates] = useState(null);
+    const { goldRates, silverRates } = useRates();
     const [form, setForm] = useState({
         metalType: 'gold',
         huidNumber: '',
@@ -31,22 +30,6 @@ export default function SellGold() {
     const [loading, setLoading] = useState(false);
     const [myRequests, setMyRequests] = useState([]);
     const [loadingRequests, setLoadingRequests] = useState(false);
-
-    useEffect(() => {
-        async function loadRates() {
-            try {
-                const [gRates, sRates] = await Promise.all([
-                    fetchLiveGoldRates(),
-                    getStoredSilverRates()
-                ]);
-                setGoldRates(gRates);
-                setSilverRates(sRates);
-            } catch (error) {
-                console.error('Error loading rates:', error);
-            }
-        }
-        loadRates();
-    }, []);
 
     useEffect(() => {
         if (currentUser) loadMyRequests();

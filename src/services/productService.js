@@ -35,7 +35,7 @@ export async function getAllProducts() {
         const snapshot = await get(productsRef);
         if (snapshot.exists()) {
             const data = snapshot.val();
-            return Object.values(data);
+            return Object.values(data).map(normalizeProduct);
         }
         return [];
     } catch (error) {
@@ -52,13 +52,20 @@ export async function getProductById(productId) {
         const productRef = ref(database, `${PRODUCTS_REF}/${productId}`);
         const snapshot = await get(productRef);
         if (snapshot.exists()) {
-            return snapshot.val();
+            return normalizeProduct(snapshot.val());
         }
         return null;
     } catch (error) {
         console.error('Error fetching product:', error);
         throw error;
     }
+}
+
+function normalizeProduct(product) {
+    return {
+        ...product,
+        imageURL: product.imageURL || product.imageUrl || product.image || ''
+    };
 }
 
 /**

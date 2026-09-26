@@ -1,7 +1,7 @@
 // ============================================
 // Live Gold Rate Service
 // Primary: GoldAPI.io (real-time INR rates)
-// Requests go through Vite proxy to bypass CORS
+// Production requests use a Netlify function so the API key stays server-side.
 // ============================================
 import { ref, set, get } from 'firebase/database';
 import { database } from '../firebase';
@@ -14,6 +14,7 @@ const GOLDAPI_KEY = 'goldapi-18qrwqsmlxk4cqg-io';
 // /goldprice → proxied to https://data-asg.goldprice.org
 const GOLDAPI_PROXY = '/goldapi/XAU/INR';
 const GOLDPRICE_PROXY = '/goldprice/dbXRates/INR';
+const PRODUCTION_RATES_ENDPOINT = '/.netlify/functions/gold-rates';
 
 // In-memory cache (avoids burning free-tier quota)
 let cachedRates = null;
@@ -52,6 +53,19 @@ async function fetchFromGoldAPI() {
     }
 
     throw new Error('GoldAPI.io returned invalid data');
+}
+
+async function fetchFromProductionFunction() {
+    const response = await fetch(PRODUCTION_RATES_ENDPOINT, {
+        signal: AbortSignal.timeout(10000)
+    });
+    if (!response.ok) throw new Error(`Production rates endpoint HTTP ${response.status}`);
+
+    const data = await response.json();
+    if (data.error || !data['24k'] || !data['22k']) {
+        throw new Error(data.error || 'Production endpoint returned invalid data');
+    }
+    return data;
 }
 
 /**
@@ -97,10 +111,12 @@ export async function fetchLiveGoldRates() {
     }
 
     // Try each source in order
-    const sources = [
-        { name: 'GoldAPI.io', fn: fetchFromGoldAPI },
-        { name: 'GoldPrice.org', fn: fetchFromGoldPriceOrg }
-    ];
+    const sources = import.meta.env.PROD
+        ? [{ name: 'Production live rates', fn: fetchFromProductionFunction }]
+        : [
+            { name: 'GoldAPI.io', fn: fetchFromGoldAPI },
+            { name: 'GoldPrice.org', fn: fetchFromGoldPriceOrg }
+        ];
 
     for (const source of sources) {
         try {

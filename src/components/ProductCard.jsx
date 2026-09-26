@@ -4,8 +4,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlus } from 'react-icons/fi';
-import { IoDiamondOutline } from 'react-icons/io5';
 import { useCart } from '../context/CartContext';
+import ProductImage from './ProductImage';
 import { calculateJewelryPrice, getProductRate } from '../services/goldRateService';
 import '../styles/ProductCard.css';
 
@@ -36,13 +36,7 @@ export default function ProductCard({ product, goldRates, silverRates }) {
     return (
         <Link to={`/product/${product.id}`} className="product-card">
             <div className="product-card-image">
-                {product.imageURL ? (
-                    <img src={product.imageURL} alt={product.name} loading="lazy" />
-                ) : (
-                    <div className="no-image-placeholder">
-                        <IoDiamondOutline />
-                    </div>
-                )}
+                <ProductImage product={product} loading="lazy" />
                 <span className={`badge ${isGold ? 'badge-gold' : 'badge-silver'} gold-badge`}>
                     {isGold ? '🥇 Gold' : '🥈 Silver'}
                 </span>

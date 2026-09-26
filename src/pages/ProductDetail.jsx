@@ -4,10 +4,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FiShoppingCart, FiArrowLeft } from 'react-icons/fi';
-import { IoDiamondOutline } from 'react-icons/io5';
 import { useCart } from '../context/CartContext';
+import ProductImage from '../components/ProductImage';
+import { useRates } from '../context/RateContext';
 import { getProductById } from '../services/productService';
-import { fetchLiveGoldRates, getStoredSilverRates, calculateJewelryPrice, getProductRate } from '../services/goldRateService';
+import { calculateJewelryPrice, getProductRate } from '../services/goldRateService';
 import toast from 'react-hot-toast';
 import '../styles/ProductDetail.css';
 
@@ -15,21 +16,14 @@ export default function ProductDetail() {
     const { id } = useParams();
     const { addToCart } = useCart();
     const [product, setProduct] = useState(null);
-    const [goldRates, setGoldRates] = useState(null);
-    const [silverRates, setSilverRates] = useState(null);
+    const { goldRates, silverRates } = useRates();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function loadProduct() {
             try {
-                const [prod, gRates, sRates] = await Promise.all([
-                    getProductById(id),
-                    fetchLiveGoldRates(),
-                    getStoredSilverRates()
-                ]);
+                const prod = await getProductById(id);
                 setProduct(prod);
-                setGoldRates(gRates);
-                setSilverRates(sRates);
             } catch (error) {
                 console.error('Error loading product:', error);
             } finally {
@@ -90,11 +84,7 @@ export default function ProductDetail() {
                     {/* Image */}
                     <div className="product-image-section">
                         <div className="product-main-image">
-                            {product.imageURL ? (
-                                <img src={product.imageURL} alt={product.name} />
-                            ) : (
-                                <IoDiamondOutline className="placeholder-icon" />
-                            )}
+                            <ProductImage product={product} className="product-detail-image" />
                         </div>
                     </div>
 

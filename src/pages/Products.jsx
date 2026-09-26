@@ -6,7 +6,8 @@ import { useSearchParams } from 'react-router-dom';
 import { IoDiamondOutline } from 'react-icons/io5';
 import { FiSearch } from 'react-icons/fi';
 import ProductCard from '../components/ProductCard';
-import { fetchLiveGoldRates, getStoredSilverRates, calculateJewelryPrice, getProductRate } from '../services/goldRateService';
+import { calculateJewelryPrice, getProductRate } from '../services/goldRateService';
+import { useRates } from '../context/RateContext';
 import { getAllProducts } from '../services/productService';
 import '../styles/Products.css';
 
@@ -19,8 +20,7 @@ export default function Products() {
     const initialMetal = searchParams.get('metal') || 'all';
 
     const [products, setProducts] = useState([]);
-    const [goldRates, setGoldRates] = useState(null);
-    const [silverRates, setSilverRates] = useState(null);
+    const { goldRates, silverRates } = useRates();
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [category, setCategory] = useState(initialCategory);
@@ -30,13 +30,7 @@ export default function Products() {
     useEffect(() => {
         async function loadData() {
             try {
-                const [gRates, sRates, prods] = await Promise.all([
-                    fetchLiveGoldRates(),
-                    getStoredSilverRates(),
-                    getAllProducts()
-                ]);
-                setGoldRates(gRates);
-                setSilverRates(sRates);
+                const prods = await getAllProducts();
                 setProducts(prods);
             } catch (error) {
                 console.error('Error loading products:', error);

@@ -8,7 +8,7 @@ import { GiDiamondRing, GiDoubleNecklace, GiCrystalEarrings } from 'react-icons/
 import { FiArrowRight } from 'react-icons/fi';
 import ProductCard from '../components/ProductCard';
 import GoldRateWidget from '../components/GoldRateWidget';
-import { fetchLiveGoldRates, getStoredSilverRates } from '../services/goldRateService';
+import { useRates } from '../context/RateContext';
 import { getAllProducts } from '../services/productService';
 import '../styles/Home.css';
 
@@ -21,21 +21,14 @@ const CATEGORIES = [
 ];
 
 export default function Home() {
-    const [goldRates, setGoldRates] = useState(null);
-    const [silverRates, setSilverRates] = useState(null);
+    const { goldRates, silverRates } = useRates();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function loadData() {
             try {
-                const [gRates, sRates, prods] = await Promise.all([
-                    fetchLiveGoldRates(),
-                    getStoredSilverRates(),
-                    getAllProducts()
-                ]);
-                setGoldRates(gRates);
-                setSilverRates(sRates);
+                const prods = await getAllProducts();
                 setProducts(prods);
             } catch (error) {
                 console.error('Error loading home data:', error);
@@ -45,21 +38,6 @@ export default function Home() {
         }
         loadData();
 
-        // Auto-refresh gold rates every minute
-        const interval = setInterval(async () => {
-            try {
-                const [rates, sRates] = await Promise.all([
-                    fetchLiveGoldRates(),
-                    getStoredSilverRates()
-                ]);
-                setGoldRates(rates);
-                setSilverRates(sRates);
-            } catch (err) {
-                console.warn('Rate refresh failed');
-            }
-        }, 60 * 1000);
-
-        return () => clearInterval(interval);
     }, []);
 
     const featuredProducts = products.slice(0, 8);
