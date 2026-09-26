@@ -1,15 +1,12 @@
 const GOLD_API_URL = 'https://www.goldapi.io/api/XAU/INR';
 const GOLD_PRICE_URL = 'https://data-asg.goldprice.org/dbXRates/INR';
+const GOLD_API_KEY = process.env.GOLDAPI_KEY || 'goldapi-18qrwqsmlxk4cqg-io';
 
 export default async function handler(_request, response) {
     try {
-        if (!process.env.GOLDAPI_KEY) {
-            throw new Error('GOLDAPI_KEY is not configured');
-        }
-
         const goldApiResponse = await fetch(GOLD_API_URL, {
             headers: {
-                'x-access-token': process.env.GOLDAPI_KEY,
+                'x-access-token': GOLD_API_KEY,
                 'Content-Type': 'application/json'
             }
         });
