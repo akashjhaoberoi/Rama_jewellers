@@ -3,6 +3,10 @@ const GOLD_PRICE_URL = 'https://data-asg.goldprice.org/dbXRates/INR';
 
 export default async function handler(_request, response) {
     try {
+        if (!process.env.GOLDAPI_KEY) {
+            throw new Error('GOLDAPI_KEY is not configured');
+        }
+
         const goldApiResponse = await fetch(GOLD_API_URL, {
             headers: {
                 'x-access-token': process.env.GOLDAPI_KEY,

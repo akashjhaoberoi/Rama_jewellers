@@ -9,6 +9,16 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaApple } from 'react-icons/fa';
 import '../styles/Pages.css';
 
+function getAuthErrorMessage(error, provider) {
+    const messages = {
+        'auth/operation-not-allowed': `Enable ${provider} in Firebase Authentication > Sign-in providers.`,
+        'auth/unauthorized-domain': 'Add this website domain in Firebase Authentication > Settings > Authorized domains.',
+        'auth/popup-blocked': 'Your browser blocked the sign-in popup. Allow popups and try again.',
+        'auth/popup-closed-by-user': 'The sign-in popup was closed before completing sign-in.'
+    };
+    return messages[error.code] || error.message || `${provider} sign-in failed`;
+}
+
 export default function Login() {
     const { login, loginWithGoogle, loginWithApple } = useAuth();
     const navigate = useNavigate();
@@ -42,7 +52,7 @@ export default function Login() {
             toast.success('Welcome to Rama Jewellers!');
             navigate('/');
         } catch (err) {
-            setError(err.message || 'Google sign-in failed');
+            setError(getAuthErrorMessage(err, 'Google'));
         } finally {
             setLoading(false);
         }
@@ -56,7 +66,7 @@ export default function Login() {
             toast.success('Welcome to Rama Jewellers!');
             navigate('/');
         } catch (err) {
-            setError(err.message || 'Apple sign-in failed');
+            setError(getAuthErrorMessage(err, 'Apple'));
         } finally {
             setLoading(false);
         }
