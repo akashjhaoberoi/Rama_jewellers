@@ -6,9 +6,6 @@
 import { ref, set, get } from 'firebase/database';
 import { database } from '../firebase';
 
-// ---- GoldAPI.io Configuration ----
-const GOLDAPI_KEY = 'goldapi-18qrwqsmlxk4cqg-io';
-
 // Use Vite proxy paths (see vite.config.js)
 // /goldapi → proxied to https://www.goldapi.io/api
 // /goldprice → proxied to https://data-asg.goldprice.org
@@ -27,10 +24,6 @@ const CACHE_DURATION = 60 * 1000; // 1 minute
  */
 async function fetchFromGoldAPI() {
     const response = await fetch(GOLDAPI_PROXY, {
-        headers: {
-            'x-access-token': GOLDAPI_KEY,
-            'Content-Type': 'application/json'
-        },
         signal: AbortSignal.timeout(10000)
     });
 
@@ -94,7 +87,7 @@ async function fetchFromGoldPriceOrg() {
 
 /**
  * Main: Fetch live gold rates with fallback chain
- * GoldAPI.io → GoldPrice.org → Firebase stored → hardcoded
+ * Server function → GoldAPI.io → GoldPrice.org → Firebase stored → hardcoded
  */
 export async function fetchLiveGoldRates() {
     // Return cached if fresh
@@ -106,12 +99,15 @@ export async function fetchLiveGoldRates() {
     const storedRates = await getStoredGoldRates();
 
     // Try each source in order
-    const sources = import.meta.env.PROD
-        ? [{ name: 'Production live rates', fn: fetchFromProductionFunction }]
-        : [
-            { name: 'GoldAPI.io', fn: fetchFromGoldAPI },
-            { name: 'GoldPrice.org', fn: fetchFromGoldPriceOrg }
-        ];
+    const sources = [
+        { name: 'Gold rates function', fn: fetchFromProductionFunction },
+        ...(!import.meta.env.PROD
+            ? [
+                { name: 'GoldAPI.io development proxy', fn: fetchFromGoldAPI },
+                { name: 'GoldPrice.org', fn: fetchFromGoldPriceOrg }
+            ]
+            : [])
+    ];
 
     for (const source of sources) {
         try {
