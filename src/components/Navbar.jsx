@@ -6,6 +6,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { FiShoppingCart, FiUser, FiMenu, FiX, FiLogOut, FiPackage, FiShield } from 'react-icons/fi';
+import RamaLogo from './RamaLogo';
 import '../styles/Navbar.css';
 
 export default function Navbar() {
@@ -48,11 +49,8 @@ export default function Navbar() {
             <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
                 <div className="navbar-inner">
                     {/* Brand */}
-                    <Link to="/" className="navbar-brand">
-                        <div className="logo-icon">RJ</div>
-                        <div className="brand-text">
-                            Rama <span>Jewellers</span>
-                        </div>
+                    <Link to="/" className="navbar-brand" aria-label="Rama Jewellers Home">
+                        <RamaLogo variant="dark" size={38} showText={true} />
                     </Link>
 
                     {/* Desktop Links */}

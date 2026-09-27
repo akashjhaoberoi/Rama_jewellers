@@ -9,7 +9,7 @@ import { getAnalytics } from 'firebase/analytics';
 const firebaseConfig = {
     apiKey: "AIzaSyARq6C9_gKJmVAqboc-QadORWa-1o5Oz4A",
     authDomain: "ramajwl-62851.firebaseapp.com",
-    databaseURL: "https://ramajwl-62851-default-rtdb.firebaseio.com",
+    databaseURL: "https://ramajwl-62851-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "ramajwl-62851",
     storageBucket: "ramajwl-62851.firebasestorage.app",
     messagingSenderId: "721410598447",

@@ -3,11 +3,12 @@
 // ============================================
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { IoDiamondOutline } from 'react-icons/io5';
 import { GiDiamondRing, GiDoubleNecklace, GiCrystalEarrings } from 'react-icons/gi';
+import { IoDiamondOutline } from 'react-icons/io5';
 import { FiArrowRight } from 'react-icons/fi';
 import ProductCard from '../components/ProductCard';
 import GoldRateWidget from '../components/GoldRateWidget';
+import RamaLogo from '../components/RamaLogo';
 import { useRates } from '../context/RateContext';
 import { getAllProducts } from '../services/productService';
 import '../styles/Home.css';
@@ -48,10 +49,15 @@ export default function Home() {
             <section className="hero">
                 <div className="hero-content">
                     <div className="hero-text">
+                        {/* Hindi brand name — big and prominent */}
+                        <div className="hindi-brand">
+                            <span className="hindi-name">रामा ज्वेलर्स</span>
+                            <span className="hindi-location">शीतलाखेत</span>
+                        </div>
                         <span className="tagline">✦ Premium Jewelry Since 1990</span>
                         <h1>
                             Timeless <span className="highlight">Elegance</span> Crafted
-                            in Gold & Silver
+                            in Gold &amp; Silver
                         </h1>
                         <p>
                             Discover our exquisite collection of handcrafted gold and silver
@@ -63,13 +69,21 @@ export default function Home() {
                                 Explore Collection <FiArrowRight />
                             </Link>
                             <Link to="/sell-gold" className="btn btn-outline btn-lg" style={{ borderColor: '#fff', color: '#fff' }}>
-                                Sell Gold & Silver
+                                Sell Gold &amp; Silver
                             </Link>
                         </div>
                     </div>
                     <div className="hero-visual">
-                        <div className="hero-diamond">
-                            <IoDiamondOutline className="icon" />
+                        <div className="hero-emblem">
+                            <RamaLogo variant="light" size={120} showText={false} />
+                            <div className="emblem-ring emblem-ring-1" />
+                            <div className="emblem-ring emblem-ring-2" />
+                            <div className="emblem-ring emblem-ring-3" />
+                            {/* Hindi text inside emblem visual */}
+                            <div className="emblem-hindi-overlay">
+                                <span className="emblem-hindi-main">रामा</span>
+                                <span className="emblem-hindi-sub">ज्वेलर्स</span>
+                            </div>
                         </div>
                     </div>
                 </div>

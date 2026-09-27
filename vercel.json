@@ -1,0 +1,15 @@
+// ============================================
+// vercel.json — SPA routing + API function config
+// ============================================
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

@@ -53,6 +53,67 @@
     animation: slideInLeft 0.8s ease;
 }
 
+/* ── Hindi Brand Name ── */
+.hindi-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 20px;
+}
+
+.hindi-name {
+    font-family: 'Noto Sans Devanagari', 'Mangal', serif;
+    font-size: 3.6rem;
+    font-weight: 800;
+    line-height: 1.15;
+    background: linear-gradient(135deg, #C9A96E 0%, #E8C99B 50%, #B76E79 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.02em;
+    display: block;
+    filter: drop-shadow(0 2px 12px rgba(201, 169, 110, 0.35));
+}
+
+.hindi-location {
+    font-family: 'Noto Sans Devanagari', 'Mangal', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.65);
+    letter-spacing: 0.08em;
+    display: block;
+}
+
+/* ── Emblem Hindi Overlay ── */
+.emblem-hindi-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.emblem-hindi-main {
+    font-family: 'Noto Sans Devanagari', 'Mangal', serif;
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #C9A96E;
+    line-height: 1;
+    text-shadow: 0 2px 16px rgba(201, 169, 110, 0.5);
+}
+
+.emblem-hindi-sub {
+    font-family: 'Noto Sans Devanagari', 'Mangal', serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(201, 169, 110, 0.75);
+    letter-spacing: 0.05em;
+}
+
 .hero-text .tagline {
     display: inline-block;
     padding: 6px 16px;
@@ -103,30 +164,55 @@
     animation: slideInRight 0.8s ease;
 }
 
-.hero-diamond {
+/* Hero Visual — Jewellery Brand Emblem */
+.hero-emblem {
     width: 380px;
     height: 380px;
     border-radius: 50%;
-    background: linear-gradient(135deg, rgba(183, 110, 121, 0.2) 0%, rgba(232, 201, 155, 0.15) 100%);
-    border: 1px solid rgba(183, 110, 121, 0.2);
+    background: linear-gradient(135deg, rgba(183, 110, 121, 0.12) 0%, rgba(201, 169, 110, 0.10) 100%);
+    border: 1px solid rgba(201, 169, 110, 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    animation: heroEmblemPulse 4s ease-in-out infinite;
 }
 
-.hero-diamond::before {
-    content: '';
+@keyframes heroEmblemPulse {
+    0%, 100% { box-shadow: 0 0 40px rgba(201, 169, 110, 0.12); }
+    50% { box-shadow: 0 0 80px rgba(201, 169, 110, 0.22); }
+}
+
+.emblem-ring {
     position: absolute;
-    inset: 20px;
     border-radius: 50%;
-    border: 1px solid rgba(183, 110, 121, 0.15);
+    border: 1px solid rgba(201, 169, 110, 0.15);
+    animation: emblemRingSpin linear infinite;
+    pointer-events: none;
 }
 
-.hero-diamond .icon {
-    font-size: 8rem;
-    color: var(--rose-gold-light);
-    opacity: 0.5;
+.emblem-ring-1 {
+    inset: 20px;
+    border-color: rgba(183, 110, 121, 0.20);
+    animation-duration: 20s;
+}
+
+.emblem-ring-2 {
+    inset: 45px;
+    border-color: rgba(201, 169, 110, 0.15);
+    animation-duration: 30s;
+    animation-direction: reverse;
+}
+
+.emblem-ring-3 {
+    inset: 70px;
+    border-color: rgba(183, 110, 121, 0.12);
+    animation-duration: 40s;
+}
+
+@keyframes emblemRingSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 /* Gold Rates Bar */
@@ -265,6 +351,14 @@
         font-size: 2.4rem;
     }
 
+    .hindi-name {
+        font-size: 2.6rem;
+    }
+
+    .hindi-location {
+        font-size: 1.1rem;
+    }
+
     .hero-text p {
         margin-left: auto;
         margin-right: auto;
@@ -276,6 +370,11 @@
 
     .hero-visual {
         display: none;
+    }
+
+    .hero-emblem {
+        width: 260px;
+        height: 260px;
     }
 
     .products-grid {
@@ -290,6 +389,14 @@
 @media (max-width: 480px) {
     .hero-text h1 {
         font-size: 2rem;
+    }
+
+    .hindi-name {
+        font-size: 2rem;
+    }
+
+    .hindi-location {
+        font-size: 1rem;
     }
 
     .products-grid,
